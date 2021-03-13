@@ -14,10 +14,19 @@ import {Input} from '../components/Input';
 import {TextButton} from '../components/TextButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-function LoginScreen({navigation}) {
+function RegistrationScreen({navigation}) {
   return (
     <View style={styles.container}>
-      <Heading style={styles.title}>Login</Heading>
+      <Icon
+        name="times-circle"
+        size={30}
+        onPress={()=>{
+           navigation.pop()
+        }}
+        style={styles.closeIcon}
+        color="purple"
+      />
+      <Heading style={styles.title}>Registration</Heading>
       <Input
         style={styles.input}
         placeholder={'Email'}
@@ -25,18 +34,10 @@ function LoginScreen({navigation}) {
       />
       <Input style={styles.input} placeholder={'Password'} secureTextEntry />
       <FilledButton
-        title={'login'}
+        title={'Register'}
         style={styles.button}
-        onPress={() => navigation.navigate('Registration')}
+        onPress={() => console.log('hello')}
       />
-      <TextButton
-        onPress={() => navigation.navigate('Registration')}
-        title={`Don't have Account? Create one`}
-      />
-      <Text style={{fontWeight: 'bold', ...styles.input}}>OR</Text>
-      <Icon.Button name="google" backgroundColor="#4285f4" onPress={() => {}}>
-        Login with Google
-      </Icon.Button>
     </View>
   );
 }
@@ -57,6 +58,11 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 32,
   },
+  closeIcon: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+  },
 });
 
-export default LoginScreen;
+export default RegistrationScreen;
