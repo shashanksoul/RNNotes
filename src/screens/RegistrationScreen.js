@@ -14,32 +14,49 @@ import {Input} from '../components/Input';
 import {TextButton} from '../components/TextButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-function RegistrationScreen({navigation}) {
-  return (
-    <View style={styles.container}>
-      <Icon
-        name="times-circle"
-        size={30}
-        onPress={()=>{
-           navigation.pop()
-        }}
-        style={styles.closeIcon}
-        color="purple"
-      />
-      <Heading style={styles.title}>Registration</Heading>
-      <Input
-        style={styles.input}
-        placeholder={'Email'}
-        keyboardType={'email-address'}
-      />
-      <Input style={styles.input} placeholder={'Password'} secureTextEntry />
-      <FilledButton
-        title={'Register'}
-        style={styles.button}
-        onPress={() => console.log('hello')}
-      />
-    </View>
-  );
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {updateEmail, updatePassword, signup} from '../redux/actions';
+
+class RegistrationScreen extends React.Component {
+  handleSignUp = () => {
+    this.props.signup();
+    this.props.navigation.pop();
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <Icon
+          name="times-circle"
+          size={30}
+          onPress={() => {
+            navigation.pop();
+          }}
+          style={styles.closeIcon}
+          color="purple"
+        />
+        <Heading style={styles.title}>Registration</Heading>
+        <Input
+          style={styles.input}
+          placeholder={'Email'}
+          autoCapitalize="none"
+          onChangeText={(email) => this.props.updateEmail(email)}
+          keyboardType={'email-address'}
+        />
+        <Input
+          style={styles.input}
+          onChangeText={(password) => this.props.updatePassword(password)}
+          placeholder={'Password'}
+          secureTextEntry
+        />
+        <FilledButton
+          title={'Register'}
+          style={styles.button}
+          onPress={() => this.handleSignUp()}
+        />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -65,4 +82,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({updateEmail, updatePassword, signup}, dispatch);
+};
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationScreen);
