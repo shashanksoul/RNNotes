@@ -21,7 +21,7 @@ import {updateEmail, updatePassword, signup} from '../redux/actions';
 class RegistrationScreen extends React.Component {
   handleSignUp = () => {
     this.props.signup();
-    this.props.navigation.pop();
+    //this.props.navigation.pop();
   };
   render() {
     return (
@@ -30,7 +30,7 @@ class RegistrationScreen extends React.Component {
           name="times-circle"
           size={30}
           onPress={() => {
-            navigation.pop();
+            this.props.navigation.pop();
           }}
           style={styles.closeIcon}
           color="purple"
