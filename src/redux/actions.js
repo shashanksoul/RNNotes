@@ -43,7 +43,7 @@ export const login = () => {
       );
       dispatch({type: actionTypes.LOGIN, payload: response.user});
     } catch (e) {
-      dispatch({type: actionTypes.Error_API, payload: e});
+      dispatch({type: actionTypes.Error_LOGIN_API, payload: e});
       console.log(e);
     }
   };
@@ -62,7 +62,7 @@ export const signup = () => {
       dispatch({type: actionTypes.SIGNUP, payload: response.user});
     } catch (e) {
       loading(false)
-      dispatch({type: actionTypes.Error_API, payload: e});
+      dispatch({type: actionTypes.Error_SIGN_API, payload: e});
       console.log(e);
     }
   };

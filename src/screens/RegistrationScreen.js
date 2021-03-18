@@ -7,13 +7,13 @@
  */
 
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text,ActivityIndicator} from 'react-native';
 import {FilledButton} from '../components/FilledButton';
 import Heading from '../components/Heading';
 import {Input} from '../components/Input';
 import {TextButton} from '../components/TextButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import SnackBar from 'react-native-snackbar-component';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {updateEmail, updatePassword, signup} from '../redux/actions';
@@ -49,10 +49,23 @@ class RegistrationScreen extends React.Component {
           placeholder={'Password'}
           secureTextEntry
         />
-        <FilledButton
-          title={'Register'}
-          style={styles.button}
-          onPress={() => this.handleSignUp()}
+        {this.props.isLoading ? (
+          <ActivityIndicator
+            size="small"
+            style={{...styles.button, padding: 20}}
+            color="purple"
+          />
+        ) : (
+          <FilledButton
+            title={'Register'}
+            style={styles.button}
+            onPress={() => this.handleSignUp()}
+          />
+        )}
+
+        <SnackBar
+          visible={this.props.errorSign != undefined ? true : false}
+          textMessage={`${this.props.errorSign}`}
         />
       </View>
     );
@@ -89,6 +102,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    isLoading: state.user.loading,
+    errorSign: state.user.errorSign,
   };
 };
 

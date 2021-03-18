@@ -11,7 +11,9 @@ import {bindActionCreators} from 'redux';
 import {updateEmail, updatePassword, login, getUser} from '../redux/actions';
 
 LogBox.ignoreLogs(['Animated: ']);
+
 class LoginScreen extends React.Component {
+
   handleLogin = async () => {
     this.props.login();
   };
@@ -54,8 +56,8 @@ class LoginScreen extends React.Component {
           Login with Google
         </Icon.Button>
         <SnackBar
-          visible={this.props.error}
-          textMessage={`${this.props.error}`}
+          visible={this.props.errorLogin!=undefined?true:false}
+          textMessage={`${this.props.errorLogin}`}
         />
       </View>
     );
@@ -91,7 +93,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     isLoading: state.user.loading,
-    error: state.user.error,
+    errorLogin: state.user.errorLogin,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
