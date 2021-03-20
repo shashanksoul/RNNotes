@@ -2,12 +2,16 @@ import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Firebase from '../config/config';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import { updateSignedState } from '../redux/actions'
 
 class SplashScreen extends React.Component {
   componentDidMount() {
-    Firebase.auth().onAuthStateChanged((user) => {
+    GoogleSignin.configure({
+      webClientId: '78516228712-fca1m81tv6bqpc7kidlctseiqf4ea6ij.apps.googleusercontent.com',
+    });
+    auth().onAuthStateChanged((user) => {
       if (user) {
         this.props.updateSignedState(true);
       } else {

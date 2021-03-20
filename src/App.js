@@ -16,7 +16,6 @@ import {Provider, useSelector, useStore} from 'react-redux';
 
 import HomeStackNavigator from './navigators/HomeStackNavigator';
 import {navigationRef} from '@react-navigation/native';
-import Firebase from './config/config';
 
 const RootStack = createStackNavigator();
 

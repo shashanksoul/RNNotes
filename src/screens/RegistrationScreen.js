@@ -17,6 +17,7 @@ import SnackBar from 'react-native-snackbar-component';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {updateEmail, updatePassword, signup} from '../redux/actions';
+import auth from '@react-native-firebase/auth';
 
 class RegistrationScreen extends React.Component {
   handleSignUp = () => {

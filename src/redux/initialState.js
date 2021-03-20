@@ -1,5 +1,7 @@
 export const initialState = {
     isSignedIn:false,
     loading:false,
-    user:''
+    user:'',
+    email:'',
+    password:''
   };

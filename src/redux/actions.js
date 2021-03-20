@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
-import Firebase from '../config/config';
-
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-community/google-signin';
 // this is what our action should look like which dispatches the "payload" to reducer
 
 export const updateSignedState = (state) => {
@@ -24,23 +24,49 @@ export const updatePassword = (password) => {
   };
 };
 
-export const loading = status => {
+export const loading = (status) => {
   return {
     type: actionTypes.LOADING,
-    payload:status
-  }
-}
+    payload: status,
+  };
+};
 
 export const login = () => {
   return async (dispatch, getState) => {
-   
     try {
-      dispatch({type: actionTypes.LOADING, payload: true});
+       dispatch(loading(true))
+     // dispatch({type: actionTypes.LOADING, payload: true});
       const {email, password} = getState().user;
-      const response = await Firebase.auth().signInWithEmailAndPassword(
-        email,
-        password,
-      );
+      if (email != '' && password != '') {
+        const response = await auth().signInWithEmailAndPassword(
+          email,
+          password,
+        );
+        dispatch({type: actionTypes.LOGIN, payload: response.user});
+      } else {
+        dispatch({
+          type: actionTypes.Error_LOGIN_API,
+          payload: "email or password can't be null",
+        });
+      }
+    } catch (e) {
+      dispatch({type: actionTypes.Error_LOGIN_API, payload: e.message});
+      console.log(e);
+    }
+  };
+};
+
+export const googleLogin = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(loading(true));
+      const {idToken} = await GoogleSignin.signIn();
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      const response =  auth().signInWithCredential(googleCredential);
       dispatch({type: actionTypes.LOGIN, payload: response.user});
     } catch (e) {
       dispatch({type: actionTypes.Error_LOGIN_API, payload: e});
@@ -51,17 +77,24 @@ export const login = () => {
 
 export const signup = () => {
   return async (dispatch, getState) => {
-    loading(true)
+    loading(true);
     try {
       const {email, password} = getState().user;
-      const response = await Firebase.auth().createUserWithEmailAndPassword(
-        email,
-        password,
-      );
-      loading(false)
-      dispatch({type: actionTypes.SIGNUP, payload: response.user});
+      if (email != '' && password != '') {
+        const response = await auth().createUserWithEmailAndPassword(
+          email,
+          password,
+        );
+        loading(false);
+        dispatch({type: actionTypes.SIGNUP, payload: response.user});
+      } else {
+        dispatch({
+          type: actionTypes.Error_SIGN_API,
+          payload: "email or password can't be null",
+        });
+      }
     } catch (e) {
-      loading(false)
+      loading(false);
       dispatch({type: actionTypes.Error_SIGN_API, payload: e});
       console.log(e);
     }

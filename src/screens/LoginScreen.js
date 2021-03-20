@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SnackBar from 'react-native-snackbar-component';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateEmail, updatePassword, login, getUser} from '../redux/actions';
+import {updateEmail, updatePassword, login,googleLogin, getUser} from '../redux/actions';
 
 LogBox.ignoreLogs(['Animated: ']);
 
@@ -52,7 +52,7 @@ class LoginScreen extends React.Component {
           title={`Don't have Account? Create one`}
         />
         <Text style={{fontWeight: 'bold', ...styles.input}}>OR</Text>
-        <Icon.Button name="google" backgroundColor="#4285f4" onPress={() => {}}>
+        <Icon.Button name="google" backgroundColor="#4285f4" onPress={() => {this.props.googleLogin()}}>
           Login with Google
         </Icon.Button>
         <SnackBar
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    {updateEmail, updatePassword, login, getUser},
+    {updateEmail, updatePassword, login, googleLogin, getUser},
     dispatch,
   );
 };
