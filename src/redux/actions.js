@@ -17,6 +17,28 @@ export const updateEmail = (email) => {
   };
 };
 
+export const checkUserSignedIn = () => {
+  return async (dispatch, getState) => {
+    try {
+      GoogleSignin.configure({
+        webClientId:
+          '78516228712-fca1m81tv6bqpc7kidlctseiqf4ea6ij.apps.googleusercontent.com',
+      });
+      auth().onAuthStateChanged((user) => {
+        if (user) {
+          updateSignedState(true);
+          dispatch({type: actionTypes.LOGIN, payload: user});
+        } else {
+          updateSignedState(false);
+        }
+      });
+    } catch (e) {
+      updateSignedState(false);
+      dispatch({type: actionTypes.Error_LOGIN_API, payload: e.message});
+    }
+  };
+};
+
 export const updatePassword = (password) => {
   return {
     type: actionTypes.UPDATE_PASSWORD,
@@ -34,15 +56,16 @@ export const loading = (status) => {
 export const login = () => {
   return async (dispatch, getState) => {
     try {
-       dispatch(loading(true))
-     // dispatch({type: actionTypes.LOADING, payload: true});
+      dispatch(loading(true));
+      // dispatch({type: actionTypes.LOADING, payload: true});
       const {email, password} = getState().user;
       if (email != '' && password != '') {
         const response = await auth().signInWithEmailAndPassword(
           email,
           password,
         );
-        dispatch({type: actionTypes.LOGIN, payload: response.user});
+        dispatch({type: actionTypes.LOGIN, payload: response});
+        console.log(JSON.stringify(response));
       } else {
         dispatch({
           type: actionTypes.Error_LOGIN_API,
@@ -66,8 +89,9 @@ export const googleLogin = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
-      const response =  auth().signInWithCredential(googleCredential);
+      const response = await auth().signInWithCredential(googleCredential);
       dispatch({type: actionTypes.LOGIN, payload: response.user});
+     // console.log(JSON.stringify(response));
     } catch (e) {
       dispatch({type: actionTypes.Error_LOGIN_API, payload: e});
       console.log(e);
@@ -77,7 +101,7 @@ export const googleLogin = () => {
 
 export const signup = () => {
   return async (dispatch, getState) => {
-    loading(true);
+    dispatch(loading(true));
     try {
       const {email, password} = getState().user;
       if (email != '' && password != '') {
@@ -85,8 +109,8 @@ export const signup = () => {
           email,
           password,
         );
-        loading(false);
-        dispatch({type: actionTypes.SIGNUP, payload: response.user});
+       // dispatch(loading(false));
+        dispatch({type: actionTypes.SIGNUP, payload: response});
       } else {
         dispatch({
           type: actionTypes.Error_SIGN_API,
@@ -94,7 +118,7 @@ export const signup = () => {
         });
       }
     } catch (e) {
-      loading(false);
+     // dispatch(loading(false));
       dispatch({type: actionTypes.Error_SIGN_API, payload: e});
       console.log(e);
     }

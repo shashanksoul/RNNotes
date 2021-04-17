@@ -4,21 +4,17 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
-import { updateSignedState } from '../redux/actions'
+import { checkUserSignedIn } from '../redux/actions'
 
 class SplashScreen extends React.Component {
   componentDidMount() {
-    GoogleSignin.configure({
-      webClientId: '78516228712-fca1m81tv6bqpc7kidlctseiqf4ea6ij.apps.googleusercontent.com',
-    });
-    auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.props.updateSignedState(true);
-      } else {
-        this.props.updateSignedState(false);
-        this.props.navigation.replace("Login")
-      }
-    });
+    this.props.checkUserSignedIn()
+    setTimeout(()=>{
+      if(!this.props.isSignedIn){
+        this.props.navigation.replace('Login');
+       }
+    },100)
+   
   }
 
   render() {
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({updateSignedState}, dispatch);
+  return bindActionCreators({checkUserSignedIn}, dispatch);
 };
 
 const mapStateToProps = (state) => {

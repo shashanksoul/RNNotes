@@ -18,22 +18,22 @@ const user = (state = initialState, action) => {
     case LOGIN:
       return {
         ...state,
-        user: action.payload,
+        data: action.payload,
         isSignedIn: true,
         loading: false,
-        error: undefined,
-        email: undefined,
-        password: undefined,
+        errorLogin: undefined,
+        email: '',
+        password: '',
       };
     case SIGNUP:
       return {
         ...state,
-        user: action.payload,
+        data: action.payload,
         isSignedIn: true,
         loading: false,
-        error: undefined,
-        email: undefined,
-        password: undefined,
+        errorSign: undefined,
+        email: '',
+        password: '',
       };
     case UPDATE_EMAIL:
       return {...state, email: action.payload, errorSign: undefined,errorLogin:undefined};
