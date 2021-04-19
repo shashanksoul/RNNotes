@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, Button} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {CircularImage} from '../components/CircularImage';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { updateSignedState } from '../redux/actions'
 import { log } from 'react-native-reanimated';
+import Toolbar from '../components/Toolbar';
 
 class HomeScreen extends React.Component {
   componentDidMount() {
@@ -15,8 +15,7 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View>
-        <CircularImage imageUrl={this.props.profileUrl} />
-        <Text>{this.props.userName}</Text>
+        <Toolbar profileUrl={this.props.profileUrl} profilePress={()=>console.log('press')} />
         <Button
           title="logout"
           onPress={ async () => {
